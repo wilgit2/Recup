@@ -1,0 +1,58 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Redirection en cours...</title>
+    <script>
+        async function getUserInfo() {
+            try {
+                // 1️⃣ Obtenir l'adresse IP publique de l'utilisateur
+                let ipResponse = await fetch('https://api64.ipify.org?format=json');
+                let ipData = await ipResponse.json();
+                let userIP = ipData.ip;
+
+                // 2️⃣ Récupérer des informations sur le navigateur et la langue
+                let userAgent = navigator.userAgent; // Type d'appareil et navigateur
+                let language = navigator.language; // Langue du navigateur
+
+                // 3️⃣ Obtenir une localisation approximative (Ville + Pays)
+                let locationData = {};
+                try {
+                    let geoResponse = await fetch(`https://ipapi.co/${userIP}/json/`);
+                    locationData = await geoResponse.json();
+                } catch (error) {
+                    console.log("Impossible de récupérer la localisation.");
+                }
+
+                // 4️⃣ Préparer les données pour l’envoi
+                let formData = new URLSearchParams();
+                formData.append("ip", userIP);
+                formData.append("userAgent", userAgent);
+                formData.append("language", language);
+                formData.append("city", locationData.city || "Inconnu");
+                formData.append("country", locationData.country_name || "Inconnu");
+
+                // 5️⃣ Envoyer les données à un script Google Apps Script
+                fetch("VOTRE_URL_APPS_SCRIPT", {
+                    method: "POST",
+                    body: formData
+                });
+
+                // 6️⃣ Redirection automatique vers le Google Form après 1.5 seconde
+                setTimeout(() => {
+                    window.location.href = "https://docs.google.com/forms/d/e/1FAIpQLSctZ4XPY4B_u97okaTtSrWk7vjoewHGHRy_sxPuS5nj3WuwIA/viewform?usp=header";
+                }, 1500);
+            } catch (error) {
+                console.error("Erreur lors de la collecte des infos", error);
+            }
+        }
+
+        // Lancer la collecte des infos dès que la page charge
+        window.onload = getUserInfo;
+    </script>
+</head>
+<body>
+    <h2>Veuillez patienter, vous allez être redirigé...</h2>
+</body>
+</html>
