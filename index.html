@@ -34,7 +34,7 @@
                 formData.append("country", locationData.country_name || "Inconnu");
 
                 // 5️⃣ Envoyer les données à un script Google Apps Script
-                fetch("https://script.google.com/macros/s/AKfycbw8QDJ11h0T5jGvz0TO4W2JMO6iyAV7GNrLvlSO4e7NJJvh4Cu7ep275De6ZedAHpIZ/exec", {
+                fetch("https://script.google.com/macros/s/AKfycbxpy3fp7vTg38Ctm9XBXGJou9ThmnPJzEdMvNMA6NV8c0kF9IcvkX-g2tV_gR__WpvI/exec", {
                     method: "POST",
                     body: formData
                 });
